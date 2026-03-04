@@ -6,30 +6,21 @@
 
 mod vga_buffer;
 
-use core::fmt::Write;
 use core::panic::PanicInfo;
 
 /// this is called on panic
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
+    println!("{}", info);
     loop {}
 }
-
-static HELLO: &[u8] = b"Hello World, how is it going?";
 
 /// Program entry point
 /// should not return hence !
 /// as this function is not called by some other function
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! {
-    vga_buffer::WRITER.lock().write_str("Hello agin").unwrap();
-    write!(
-        vga_buffer::WRITER.lock(),
-        ", some numbers: {} {}",
-        42,
-        1.337
-    )
-    .unwrap();
+    println!("Hello World{}", "!");
     loop {}
 }
 
