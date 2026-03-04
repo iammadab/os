@@ -17,3 +17,12 @@ pub enum Color {
     Yellow,
     White,
 }
+
+/// Represents both foreground and background
+struct ColorCode(u8);
+
+impl ColorCode {
+    fn new(foreground: Color, background: Color) -> Self {
+        Self((background as u8) << 4 | foreground as u8)
+    }
+}
