@@ -1,0 +1,19 @@
+#[repr(u8)]
+pub enum Color {
+    Black,
+    Blue,
+    Green,
+    Cyan,
+    Red,
+    Mangenta,
+    Brown,
+    LightGray,
+    DarkGray,
+    LightBlue,
+    LightGreen,
+    LightCyan,
+    LightRed,
+    Pink,
+    Yellow,
+    White,
+}
