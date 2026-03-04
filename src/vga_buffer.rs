@@ -1,4 +1,16 @@
+use core::fmt;
+
+use lazy_static::lazy_static;
+use spin::Mutex;
 use volatile::Volatile;
+
+lazy_static! {
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+        column_position: 0,
+        color_code: ColorCode::new(Color::Yellow, Color::Black),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+    });
+}
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -31,7 +43,7 @@ pub enum Color {
 struct ColorCode(u8);
 
 impl ColorCode {
-    fn new(foreground: Color, background: Color) -> Self {
+    const fn new(foreground: Color, background: Color) -> Self {
         Self((background as u8) << 4 | foreground as u8)
     }
 }
@@ -112,13 +124,9 @@ impl Writer {
     }
 }
 
-pub fn print_something() {
-    let mut writer = Writer {
-        column_position: 0,
-        color_code: ColorCode::new(Color::Yellow, Color::Black),
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
-
-    writer.write_byte(b'H');
-    writer.write_string("ello World!");
+impl core::fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.write_string(s);
+        Ok(())
+    }
 }
