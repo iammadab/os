@@ -47,3 +47,8 @@ sudo pacman -S tigervnc
 ```bash
 sudo pacman -S libvncserver gtk-vnc
 ```
+
+## Credits
+
+Inspired by Philipp Oppermann's "Writing an OS in Rust" series:
+https://os.phil-opp.com/
