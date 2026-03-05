@@ -11,6 +11,10 @@ pub mod vga_buffer;
 
 use core::panic::PanicInfo;
 
+pub fn init() {
+    interrupts::init_idt();
+}
+
 pub trait Testable {
     fn run(&self) -> ();
 }
