@@ -21,7 +21,12 @@ lazy_static! {
             stack_end
         };
         tss
-    }
+    };
+}
+
+struct Selectors {
+    code_selector: SegmentSelector,
+    tss_selector: SegmentSelector,
 }
 
 lazy_static! {
