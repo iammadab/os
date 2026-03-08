@@ -1,3 +1,4 @@
+use bootloader::bootinfo::MemoryMap;
 use x86_64::{
     structures::paging::{
         FrameAllocator, Mapper, OffsetPageTable, Page, PageTable, PhysFrame, Size4KiB,
@@ -38,10 +39,16 @@ pub fn create_example_mapping(
     map_to_result.expect("map to failed").flush();
 }
 
-pub struct EmptyFrameAllocator;
+pub struct BootInfoFrameAllocator {
+    memory_map: &'static MemoryMap,
+    next: usize,
+}
 
-unsafe impl FrameAllocator<Size4KiB> for EmptyFrameAllocator {
-    fn allocate_frame(&mut self) -> Option<PhysFrame> {
-        None
+impl BootInfoFrameAllocator {
+    pub unsafe fn init(memory_map: &'static MemoryMap) -> Self {
+        BootInfoFrameAllocator {
+            memory_map,
+            next: 0,
+        }
     }
 }
