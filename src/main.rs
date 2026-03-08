@@ -8,17 +8,25 @@
 #![test_runner(os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use bootloader::{entry_point, BootInfo};
 use core::panic::PanicInfo;
 use os::println;
+
+entry_point!(kernel_main);
 
 /// Program entry point
 /// should not return hence !
 /// as this function is not called by some other function
 #[unsafe(no_mangle)]
-pub extern "C" fn _start() -> ! {
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
     println!("Hello World{}", "!");
 
     os::init();
+
+    use x86_64::registers::control::Cr3;
+
+    let (level_4_page_table, _) = Cr3::read();
+    println!("l4 page table at {:?}", level_4_page_table.start_address());
 
     #[cfg(test)]
     test_main();
